@@ -2,19 +2,30 @@ const $ = (selector) => {
   return document.querySelector(selector)
 }
 
-const addClass = (obj, classname) => {
-  obj.classList.add(classname)
+const addClass = (obj, classname1, classname2) => {
+  if (classname1) {
+    obj.classList.add(classname1)
+  }
+  if (classname2) {
+    obj.classList.add(classname2)
+  }
 }
 
 const delClass = (obj, classname) => {
   obj.classList.remove(classname)
 }
 
+const createDom = (tpl) => {
+  const div = document.createElement('div');
+  div.innerHTML = tpl;
+  return div.children[0];
+}
+
 const para = $('p.para')
 const label1 = $('div.label1')
 const label2 = $('div.label2')
-const num = $('input.num')
-const psw = $('input.psw')
+const inputNum = $('input.num')
+const inputPsw = $('input.psw')
 const hint = $('div.hint')
 const btn = $('.btn')
 
@@ -23,23 +34,32 @@ const showHint = (hintText) => {
 }
 
 btn.onclick = () => {
-  if (psw.value == md5(num.value)) {
-    addClass(num, 'fadeout')
-    addClass(psw, 'fadeout')
-    addClass(label1, 'fadeout')
-    addClass(label2, 'fadeout')
-    addClass(hint, 'fadeout')
-    addClass(btn, 'fadeout')
-    para.innerHTML = messages['num']
-    addClass(para, 'fadein')
+  // console.log(inputNum.value, md5(inputNum.value))
+  if (inputPsw.value == md5(inputNum.value)) {
+    addClass(inputNum, 'fadeout', 'disappear')
+    addClass(inputPsw, 'fadeout', 'disappear')
+    addClass(label1, 'fadeout', 'disappear')
+    addClass(label2, 'fadeout', 'disappear')
+    addClass(hint, 'fadeout', 'disappear')
+    addClass(btn, 'fadeout', 'disappear')
+
+    if (inputNum.value == '2209baoxuesha') {
+      para.appendChild(createDom(messages[inputNum.value][0]))
+      para.appendChild(createDom(messages[inputNum.value][1]))
+      para.appendChild(createDom(messages[inputNum.value][2]))
+    } else {
+      para.innerHTML = messages[inputNum.value]
+    }
+    delClass(para, 'disappear')
+    addClass(para, 'fadein', 'appear')
   } else {
     hint.innerHTML = 'please check it correct'
   }
 }
 
 window.onload = () => {
-  addClass(num, 'fadein')
-  addClass(psw, 'fadein')
+  addClass(inputNum, 'fadein')
+  addClass(inputPsw, 'fadein')
   addClass(label1, 'fadein')
   addClass(label2, 'fadein')
   addClass(hint, 'fadein')
